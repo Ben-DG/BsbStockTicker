@@ -14,11 +14,11 @@ def get_basic_quote(ticker: str) -> discord.Embed:
     data = get_json(ticker_url)
 
     price_data = data.get('price')
-    price = price_data.get('regularMarketPrice')
-    change = round(price_data.get('regularMarketChange'), 2)
-    change_str = "+" + str(change) if change > 0 else str(change)
-    change_percent = round(price_data.get('regularMarketChangePercent') * 100, 2)
-    change_percent_str = "+" + str(change_percent) if change > 0 else str(change_percent)
+    price = '{0:.2f}'.format(price_data.get('regularMarketPrice'))
+    change = price_data.get('regularMarketChange')
+    change_str = "+" + '{0:.2f}'.format(change) if change > 0 else '{0:.2f}'.format(change)
+    change_percent = price_data.get('regularMarketChangePercent') * 100
+    change_percent_str = "+" + '{0:.2f}'.format(change_percent) if change > 0 else '{0:.2f}'.format(change_percent)
     color = 0x33cc33 if change >= 0 else 0xcc0000
 
     name_data = data.get('quoteType')
@@ -33,9 +33,10 @@ def get_basic_quote(ticker: str) -> discord.Embed:
     emojis = get_emojis(change_percent)
 
     title = "".join([company_name, " (", symbol, ")"])
-    description = "".join(["**", str(round(price, 2)), "**",
+    description = "".join(["**", price, "**",
                            " | ", change_str,
-                           " (", change_percent_str, "%)", emojis])
+                           " (", change_percent_str, "%)",
+                           emojis])
 
     return discord.Embed(title=title, url=ticker_url, description=description, color=color)
 
