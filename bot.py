@@ -12,7 +12,7 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
 client = discord.Client()
-pattern = re.compile("[$][A-Za-z]{1,10}[-][A-Za-z]{1,5}\\.[A-Za-z]{1,5}|[$[A-Za-z]{1,10}\\.[A-Za-z]{1,5}|[$][A-Za-z]{1,10}[-][A-Za-z]{1,5}|[$][A-Za-z]{1,5}")
+pattern = re.compile("[$][A-Za-z]{1,10}[-][A-Za-z]{1,5}\\.[A-Za-z]{1,5}|[$][A-Za-z]{1,10}\\.[A-Za-z]{1,5}|[$][A-Za-z]{1,10}[-][A-Za-z]{1,5}|[$][A-Za-z]{1,5}")
 
 
 @client.event
@@ -29,7 +29,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    stocks = list(set(re.findall(pattern, message.content)))
+    stocks = list(dict.fromkeys(re.findall(pattern, message.content)))
     for stock in stocks:
         try:
             embed = api.get_basic_quote(stock[1:])
